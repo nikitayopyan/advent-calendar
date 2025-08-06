@@ -1,11 +1,11 @@
 <template>
   <div v-if="isUnlocked" class="day"> 
-    <h2>День №{{ dayNumber }}</h2>
+    <h2 class="bold">День №{{ dayNumber }}</h2>
     <p>{{ note }}</p>
-    <button v-if="!showTask" @click="showTask = true">Відкрити завдання</button>
+    <button v-if="!showTask" @click="showTask = true">Відкрий завдання</button>
     <div v-else>
-      <h3>Завдання:</h3>
-      <p >{{ task }}</p>
+      <h3 class="bold">Завдання:</h3>
+      <p>{{ task }}</p>
     </div>
   </div>
   <TaskBlocker v-else :unlockedDay="unlockedDay" />

@@ -6,17 +6,23 @@
 </script>
 
 <style>
-html, body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+* {
+  font-family: 'Ysabeau', sans-serif;
+  font-weight: 300;
 }
 body {
   margin: 0;
   padding: 0.6rem;
-  background: #f6f6f6;
+  background-image: url('./assets/presents-bg.png');
+  background-repeat: repeat;
+  background-color: #EFCFD4;
   color: #333;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+}
+.bold {
+  font-weight: 700;
 }
 </style>
