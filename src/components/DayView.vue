@@ -8,28 +8,50 @@
       <p>{{ task }}</p>
     </div>
   </div>
-  <TaskBlocker v-else :unlockedDay="unlockedDay" />
+  <TaskBlocker v-else :unlockedDay="currentUnlockedDay" />
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import notes from '../data/notes';
 import tasks from '../data/tasks';
 import TaskBlocker from './TaskBlocker.vue';
 
 const route = useRoute();
-const dayNumber = computed(() => Number(route.path.split('/').pop()));
-const unlockedDay = ref(Number(localStorage.getItem('unlockedDay') || 1));
-const isUnlocked = computed(() => dayNumber.value <= unlockedDay.value);
-const note = notes[dayNumber.value - 1];
-const task = tasks[dayNumber.value - 1];
+
 const showTask = ref(false);
+const currentUnlockedDay = ref(Number(localStorage.getItem('unlockedDay') || 1));
+const dayNumber = ref(Number(route.path.split('/').pop()));
+
+watch(
+  () => route.path,
+  (newVal) => {
+    dayNumber.value = Number(newVal.split('/').pop()) || 1;
+    updateUnlockState();
+    showTask.value = false;
+  }
+);
+
+const isUnlocked = computed(() => dayNumber.value <= currentUnlockedDay.value);
+
+const note = computed(() => notes[dayNumber.value - 1] || '');
+const task = computed(() => tasks[dayNumber.value - 1] || '');
+
+const updateUnlockState = () => {
+  const unlockedFromStorage = Number(localStorage.getItem('unlockedDay') || 1);
+
+  if (dayNumber.value === unlockedFromStorage && unlockedFromStorage < 14) {
+    const next = unlockedFromStorage + 1;
+    localStorage.setItem('unlockedDay', next.toString());
+    currentUnlockedDay.value = next;
+  } else {
+    currentUnlockedDay.value = unlockedFromStorage;
+  }
+}
 
 onMounted(() => {
-  if (dayNumber.value === unlockedDay.value) {
-    localStorage.setItem('unlockedDay', dayNumber.value + 1);
-  }
+  updateUnlockState();
 });
 </script>
 
