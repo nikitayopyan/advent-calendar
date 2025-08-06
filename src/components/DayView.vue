@@ -19,16 +19,16 @@ import tasks from '../data/tasks';
 import TaskBlocker from './TaskBlocker.vue';
 
 const route = useRoute();
-const dayNumber = Number(route.path.split('/').pop());
+const dayNumber = computed(() => Number(route.path.split('/').pop()));
 const unlockedDay = ref(Number(localStorage.getItem('unlockedDay') || 1));
-const isUnlocked = computed(() => dayNumber <= unlockedDay.value);
-const note = notes[dayNumber - 1];
-const task = tasks[dayNumber - 1];
+const isUnlocked = computed(() => dayNumber.value <= unlockedDay.value);
+const note = notes[dayNumber.value - 1];
+const task = tasks[dayNumber.value - 1];
 const showTask = ref(false);
 
 onMounted(() => {
-  if (dayNumber === unlockedDay.value) {
-    localStorage.setItem('unlockedDay', dayNumber + 1);
+  if (dayNumber.value === unlockedDay.value) {
+    localStorage.setItem('unlockedDay', dayNumber.value + 1);
   }
 });
 </script>
